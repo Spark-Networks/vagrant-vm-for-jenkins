@@ -37,9 +37,9 @@ do_jenkins_check() {
 
 # TIMEZONE
 # Credit: http://www.thegeekstuff.com/2010/09/change-timezone-in-linux/
-echo "Setting timezone to America/Centeral"
+echo "Setting timezone to America/Central"
 rm /etc/localtime
-ln -s /usr/share/zoneinfo/US/Central localtime
+ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
 # INSTALL JENKINS
 sudo apt-get -y remove jenkins
@@ -82,11 +82,3 @@ echo "Restarted Jenkins after installing plugins."
 do_jenkins_check
 
 printf "Setup complete!\n"
-
-# printf "Working directory is: %s." $(pwd)
-
-# if [ ! -f /home/vagrant/.bash_aliases ]; then 
-#	printf "# This is a comment." > /home/vagrant/.bash_aliases ;
-# fi;
-
-# ls -la 
