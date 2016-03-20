@@ -76,6 +76,7 @@ export JENKINS_URL=http://localhost:8080
 
 echo "Installing build-timeout plugin for Jenkins."
 java -jar /home/vagrant/jenkins-cli.jar install-plugin build-timeout > /dev/null
+java -jar /home/vagrant/jenkins-cli.jar install-plugin job-dsl > /dev/null
 java -jar /home/vagrant/jenkins-cli.jar restart > /dev/null
 
 echo "Restarted Jenkins after installing plugins."
