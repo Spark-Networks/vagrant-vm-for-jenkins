@@ -10,7 +10,7 @@ A working Vagrant installation https://www.vagrantup.com/downloads.html
 Clone this repo and run vagrant up ( this may differ slightly for Windows)
 
 ```sh
-$ git clone git@github.com:Spark-Networks/vagrant-vm-for-jenkins.git
+$ git clone https://github.com/riojack/vagrant-vm-for-jenkins.git
 $ cd vagrant-vm-for-jenkins
 $ vagrant up
 ```
