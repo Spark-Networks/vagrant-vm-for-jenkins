@@ -4,13 +4,13 @@ do_jenkins_check() {
 	printf "Waiting for Jenkins to come up."
 
 	sleep_amount_seconds=1
-	max_checks=30
+	max_checks=120
 	checks=0
 	reached_jenkins=0
 	status_code=000
 
 	while [ $reached_jenkins -eq 0 -a $checks -lt $max_checks ]; do 
-		next_status_code=$(curl --output /dev/null --silent --head --write-out "%{http_code}" http://localhost:8080)
+		next_status_code=$(curl -I --output /dev/null --silent --head --write-out "%{http_code}" http://localhost:8080 | head -n 1 | cut -d$' ' -f2)
 
 		if [ ! $next_status_code -eq $status_code ]; then
 			printf "Service changed from a %s response to a %s response." $status_code $next_status_code
@@ -19,7 +19,7 @@ do_jenkins_check() {
 		status_code=$next_status_code
 
 		checks=$[$checks+1]
-		if [ $status_code -eq 200 ]; then
+		if [ $status_code -eq 403 ]; then
 			reached_jenkins=1
 			break
 		fi
@@ -37,9 +37,9 @@ do_jenkins_check() {
 
 # TIMEZONE
 # Credit: http://www.thegeekstuff.com/2010/09/change-timezone-in-linux/
-echo "Setting timezone to America/Central"
-rm /etc/localtime
-ln -s /usr/share/zoneinfo/US/Central /etc/localtime
+#echo "Setting timezone to America/Central"
+#rm /etc/localtime
+#ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
 # INSTALL JENKINS
 sudo apt-get -y remove jenkins
@@ -64,6 +64,8 @@ fi
 echo "Appending aliases to bash aliases"
 printf "\n\n. /home/vagrant/.bash_aliases" >> /home/vagrant/.bashrc
 
+service jenkins start
+
 do_jenkins_check
 
 printf "Setting up Jenkins CLI\n"
@@ -75,11 +77,14 @@ printf "\n alias jnkns=\"java -jar /home/vagrant/jenkins-cli.jar\"" >> /home/vag
 export JENKINS_URL=http://localhost:8080
 
 echo "Installing build-timeout plugin for Jenkins."
-java -jar /home/vagrant/jenkins-cli.jar install-plugin build-timeout > /dev/null
-java -jar /home/vagrant/jenkins-cli.jar install-plugin job-dsl > /dev/null
-java -jar /home/vagrant/jenkins-cli.jar restart > /dev/null
+#java -jar /home/vagrant/jenkins-cli.jar install-plugin build-timeout > /dev/null
+#java -jar /home/vagrant/jenkins-cli.jar install-plugin job-dsl > /dev/null
+#java -jar /home/vagrant/jenkins-cli.jar restart > /dev/null
 
 echo "Restarted Jenkins after installing plugins."
 do_jenkins_check
+
+jenkins_password=$(cat /var/lib/jenkins/secrets/initialAdminPassword)
+echo "Browse to https://localhost:8100 and use this password for initial setup: "$jenkins_password
 
 printf "Setup complete!\n"
