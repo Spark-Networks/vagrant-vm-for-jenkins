@@ -37,9 +37,9 @@ do_jenkins_check() {
 
 # TIMEZONE
 # Credit: http://www.thegeekstuff.com/2010/09/change-timezone-in-linux/
-echo "Setting timezone to America/Central"
-rm /etc/localtime
-ln -s /usr/share/zoneinfo/US/Central /etc/localtime
+#echo "Setting timezone to America/Central"
+#rm /etc/localtime
+#ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
 # INSTALL JENKINS
 sudo apt-get -y remove jenkins
@@ -74,15 +74,15 @@ printf "\n alias jnkns=\"java -jar /home/vagrant/jenkins-cli.jar\"" >> /home/vag
 
 export JENKINS_URL=http://localhost:8080
 
-echo "Installing build-timeout plugin for Jenkins."
-java -jar /home/vagrant/jenkins-cli.jar install-plugin build-timeout > /dev/null
-java -jar /home/vagrant/jenkins-cli.jar install-plugin job-dsl > /dev/null
-java -jar /home/vagrant/jenkins-cli.jar restart > /dev/null
+#echo "Installing build-timeout plugin for Jenkins."
+#java -jar /home/vagrant/jenkins-cli.jar install-plugin build-timeout > /dev/null
+#java -jar /home/vagrant/jenkins-cli.jar install-plugin job-dsl > /dev/null
+#java -jar /home/vagrant/jenkins-cli.jar restart > /dev/null
 
 echo "Restarted Jenkins after installing plugins."
 do_jenkins_check
 
 jenkins_password=$(cat /var/lib/jenkins/secrets/initialAdminPassword)
-echo "Browse to https://localhost:8100 and use this password for initial setup: "$jenkins_password
+echo "Browse to http://localhost:8100 and use this password for initial setup: "$jenkins_password
 
 printf "Setup complete!\n"
